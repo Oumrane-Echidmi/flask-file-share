@@ -3,7 +3,7 @@
 A modern, fast, and secure local file sharing application built with **Flask**.  
 Designed to transfer files and folders effortlessly between devices on a local network.
 
-![Screenshot](screenshot.png)
+<img width="1599" height="726" alt="Capture d&#39;écran 2026-01-03 213144" src="https://github.com/user-attachments/assets/ecca687b-c311-4d88-a368-e0c08863d96c" />
 
 ## ✨ Features
 
