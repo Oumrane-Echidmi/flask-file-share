@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partage Ultra-Rapide</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>Partage de Fichiers</h1>
+            <p class="subtitle">Simple. Rapide. Sécurisé.</p>
+        </header>
+
+        {% if message %}
+            <div class="alert success">{{ message }}</div>
+        {% endif %}
+
+        <div class="grid-layout">
+            <!-- Upload Section -->
+            <section class="card upload-card">
+                <h2>⬆️ Envoyer</h2>
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('file')">Fichiers</button>
+                    <button class="tab-btn" onclick="switchTab('folder')">Dossier</button>
+                </div>
+
+                <!-- File Mode Form -->
+                <form method="post" enctype="multipart/form-data" class="upload-form" id="file-form">
+                    <div class="file-drop-area">
+                        <input type="file" name="file" id="fileInput" multiple class="file-input">
+                        <label for="fileInput" class="custom-file-label">
+                            <span class="icon">📄</span>
+                            <span class="text">Choisir des fichiers</span>
+                        </label>
+                    </div>
+                    <div id="file-count" class="file-status">Aucun fichier sélectionné</div>
+                    <button type="submit" class="btn-primary">Envoyer Fichiers</button>
+                </form>
+
+                <!-- Folder Mode Form -->
+                <form method="post" enctype="multipart/form-data" class="upload-form" id="folder-form" style="display: none;">
+                    <div class="file-drop-area">
+                        <input type="file" name="file" id="folderInput" webkitdirectory directory multiple class="file-input">
+                        <label for="folderInput" class="custom-file-label">
+                            <span class="icon">📁</span>
+                            <span class="text">Choisir un dossier</span>
+                        </label>
+                    </div>
+                    <div id="folder-count" class="file-status">Aucun dossier sélectionné</div>
+                    <button type="submit" class="btn-primary">Envoyer Dossier</button>
+                </form>
+            </section>
+
+            <!-- Library Section -->
+            <section class="card library-card">
+                <h2>⬇️ Bibliothèque</h2>
+                <p class="info">Fichiers partagés disponibles</p>
+                
+                {% if files %}
+                <ul class="file-list">
+                    {% for file in files %}
+                    <li class="file-item">
+                        <span class="filename">{{ file }}</span>
+                        <a href="{{ url_for('download_file', filename=file) }}" class="btn-download" download>
+                            Télécharger
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">
+                    <p>Aucun fichier partagé pour le moment.</p>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching
+        function switchTab(mode) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.upload-form').forEach(f => f.style.display = 'none');
+            
+            if(mode === 'file') {
+                document.querySelector('[onclick="switchTab(\'file\')"]').classList.add('active');
+                document.getElementById('file-form').style.display = 'block';
+            } else {
+                document.querySelector('[onclick="switchTab(\'folder\')"]').classList.add('active');
+                document.getElementById('folder-form').style.display = 'block';
+            }
+        }
+
+        // File Input Logic
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('file-count');
+        
+        fileInput.addEventListener('change', function() {
+            if(this.files.length > 0) {
+                fileInfo.innerText = this.files.length + " fichier(s) prêt(s)";
+                fileInfo.classList.add('active');
+            } else {
+                fileInfo.innerText = "Aucun fichier sélectionné";
+                fileInfo.classList.remove('active');
+            }
+        });
+
+        // Folder Input Logic
+        const folderInput = document.getElementById('folderInput');
+        const folderInfo = document.getElementById('folder-count');
+
+        folderInput.addEventListener('change', function() {
+            if(this.files.length > 0) {
+                folderInfo.innerText = this.files.length + " élément(s) prêt(s)";
+                folderInfo.classList.add('active');
+            } else {
+                folderInfo.innerText = "Aucun dossier sélectionné";
+                folderInfo.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
