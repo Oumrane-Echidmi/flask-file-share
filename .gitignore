@@ -1,18 +1,19 @@
-# Virtual Environment (in test folder)
-test/venv/
-test/env/
-test/Scripts/
-test/Lib/
-test/Include/
-test/pyvenv.cfg
+# Virtual Environment
+test/
+venv/
+env/
+Scripts/
+Lib/
+Include/
+pyvenv.cfg
 
 # Python Cache
 **/__pycache__/
 **/*.pyc
 
 # Application Data
-test/uploads/
-test/instance/
+uploads/
+instance/
 
 # IDEs
 .vscode/
